@@ -6,6 +6,8 @@ Grok Bot, 공식 Tesla Fleet API, 안드로이드 MacroDroid, 네이버 지도 A
 👉 템플릿: [Tesla Ready Korea 템플릿](https://x.ai/bot/OyebNt77l1YA-GIB_7T5M)
 (템플릿을 가져오면 봇이 첫 대화에서 아래 설정을 하나씩 물어보며 같이 진행합니다.)
 
+⚠️ 현재 템플릿 링크를 폰에서 열면 오류가 납니다. PC에서 열어 주세요. (Grok Bot 쪽에 버그로 제보해 둔 상태입니다.)
+
 ---
 
 ## 어떻게 동작하나요
