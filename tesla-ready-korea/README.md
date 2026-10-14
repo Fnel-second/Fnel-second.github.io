@@ -154,7 +154,7 @@ Grok Bot에 Google Calendar 등 캘린더 플러그인을 연결해 두면, 봇�
 3. NAVER API HUB 지역 검색 API로 '목적지명 + 주차장'을 찾습니다.
    - `GET https://naverapihub.apigw.ntruss.com/search/v1/local?query=<목적지명 주차장>&display=5&start=1&sort=random` (display 최대 5)
    - 헤더: `X-NCP-APIGW-API-KEY-ID`, `X-NCP-APIGW-API-KEY` (환경 변수 `NAVER_SEARCH_CLIENT_ID` / `NAVER_SEARCH_CLIENT_SECRET`)
-   - 결과의 `mapx`/`mapy`는 WGS84 경도/위도에 10^7을 곱한 정수로 보고 나눠서 씁니다 (확인 필요).
+   - 결과의 `mapx`/`mapy`는 정수이며 10^7로 나누면 WGS84 경도/위도입니다 (예: 1270856213 → 127.0856213).
    - 목적지명은 일정 장소의 장소/건물 이름을 씁니다(주소 문자열 아님). 장소에 주소만 있으면 주소 검색 결과의 건물명을 쓰고, 건물명도 없으면 주차장 검색을 건너뛰고 원래 주소로 갑니다.
    - 후보 조건: 장소 이름(`title`, HTML 태그 제거·공백 무시)에 목적지명이 들어간 것만 남깁니다. 예: 목적지 'OO병원'이면 'OO병원 주차장', 'OO병원 별관 주차장'만. 근처 공영·다른 건물 주차장은 가까워도 제외합니다.
    - 500m 거리 조건은 이름 조건을 통과한 후보에서 엉뚱한 지점을 빼는 보조 필터로만 씁니다.
