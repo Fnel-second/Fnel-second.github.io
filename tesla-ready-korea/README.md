@@ -151,9 +151,9 @@ Grok Bot에 Google Calendar 등 캘린더 플러그인을 연결해 두면, 봇�
 공조를 켜는 시점에 목적지(가능하면 그 근처 주차장)를 차량 내비로 보내 둡니다. 타자마자 바로 출발할 수 있습니다.
 1. 일정(캘린더 이벤트)의 '장소'에서 목적지를 읽습니다.
 2. 네이버 주소 검색(Geocoding)으로 목적지 좌표를 구합니다.
-3. 네이버 개발자 센터 지역 검색 API로 '목적지명 + 주차장'을 찾습니다.
-   - `GET https://openapi.naver.com/v1/search/local.json?query=<목적지명 주차장>&display=5`
-   - 헤더: `X-Naver-Client-Id`, `X-Naver-Client-Secret` (환경 변수 `NAVER_SEARCH_CLIENT_ID` / `NAVER_SEARCH_CLIENT_SECRET`)
+3. NAVER API HUB 지역 검색 API로 '목적지명 + 주차장'을 찾습니다.
+   - `GET https://naverapihub.apigw.ntruss.com/search/v1/local?query=<목적지명 주차장>&display=5&start=1&sort=random` (display 최대 5)
+   - 헤더: `X-NCP-APIGW-API-KEY-ID`, `X-NCP-APIGW-API-KEY` (환경 변수 `NAVER_SEARCH_CLIENT_ID` / `NAVER_SEARCH_CLIENT_SECRET`)
    - 결과의 `mapx`/`mapy`는 WGS84 경도/위도에 10^7을 곱한 정수로 보고 나눠서 씁니다 (확인 필요).
    - 목적지명은 일정 장소의 장소/건물 이름을 씁니다(주소 문자열 아님). 장소에 주소만 있으면 주소 검색 결과의 건물명을 쓰고, 건물명도 없으면 주차장 검색을 건너뛰고 원래 주소로 갑니다.
    - 후보 조건: 장소 이름(`title`, HTML 태그 제거·공백 무시)에 목적지명이 들어간 것만 남깁니다. 예: 목적지 'OO병원'이면 'OO병원 주차장', 'OO병원 별관 주차장'만. 근처 공영·다른 건물 주차장은 가까워도 제외합니다.
@@ -170,7 +170,7 @@ Grok Bot에 Google Calendar 등 캘린더 플러그인을 연결해 두면, 봇�
 6. 공조 보고에 결과를 넣습니다: 목적지 종류(선택한 주차장 / 무응답으로 가장 가까운 주차장 / 원래 주소)와 사용한 명령(navigation_gps_request / share / 실패).
 7. 차에 타면 화면의 목적지가 맞는지 한 번 확인하세요.
 
-**지역 검색 키 받는 법 (일정 기반 준비를 쓸 때 필수)**: developers.naver.com → Application 등록 → 사용 API에서 '검색' 선택 → Client ID/Secret 발급. 무료이고 일일 호출 한도가 있습니다. 키는 채팅에 붙여 넣지 말고 봇의 비밀값 입력 카드로 넣으세요. 처음 시작 안내에서 이 단계를 함께 진행합니다.
+**지역 검색 키 받는 법 (일정 기반 준비를 쓸 때 필수)**: 네이버 개발자센터의 검색 API는 2026년 7월 31일부터 신규 신청이 막히고 NAVER API HUB로 옮겨졌습니다([공지](https://developers.naver.com/notice/article/32530)). 네이버 클라우드 플랫폼(NCP) 콘솔 → Services → Application Services → NAVER API HUB → 이용 신청 → Application 등록에서 '지역 검색 결과 조회' 선택 → 키 ID/키 발급. 현재 한시적 무료이고 하루 25,000회 한도입니다(유료 전환 시 사전 공지 예정, 이후 요금은 확인되지 않음). 키 ID는 `NAVER_SEARCH_CLIENT_ID`, 키는 `NAVER_SEARCH_CLIENT_SECRET`에 넣습니다. 키는 채팅에 붙여 넣지 말고 봇의 비밀값 입력 카드로 넣으세요. 처음 시작 안내에서 이 단계를 함께 진행합니다.
 
 **기존 사용자**: 이미 봇을 쓰고 있다면 템플릿을 다시 가져오지 말고 [업데이트 가이드](https://fnel-second.github.io/tesla-ready-korea/update.html)를 보세요.
 

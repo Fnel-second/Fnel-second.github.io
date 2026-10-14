@@ -45,10 +45,11 @@
 - 후보 1개면 자동, 여러 개면 출발 계획을 잡을 때 한 번 묻고, 답이 없으면 가장 가까운 후보, 없으면 원래 주소로 보냅니다.
 - 추가 권한이나 재인증은 필요 없습니다(`vehicle_cmds`).
 
-**네이버 '검색' API 키 (일정 기반 준비를 쓸 때만 필요)**
-1. developers.naver.com → Application 등록
-2. 사용 API에서 '검색' 선택
-3. 받은 Client ID/Secret을 봇의 비밀값 입력 카드로 넣기 (`NAVER_SEARCH_CLIENT_ID` / `NAVER_SEARCH_CLIENT_SECRET`). 채팅에 붙여 넣지 마세요.
+**NAVER API HUB 지역 검색 키 (일정 기반 준비를 쓸 때만 필요)**
+네이버 개발자센터 검색 API는 2026년 7월 31일부터 신규 신청이 막히고 NAVER API HUB로 옮겨졌습니다([공지](https://developers.naver.com/notice/article/32530)).
+1. 네이버 클라우드 플랫폼(NCP) 콘솔 → Services → Application Services → NAVER API HUB → 이용 신청
+2. Application 등록에서 '지역 검색 결과 조회' 선택 (현재 한시적 무료, 하루 25,000회)
+3. 받은 키 ID/키를 봇의 비밀값 입력 카드로 넣기 (`NAVER_SEARCH_CLIENT_ID` / `NAVER_SEARCH_CLIENT_SECRET`). 채팅에 붙여 넣지 마세요.
 
 - 키를 등록하기 전까지는 주차장 검색 없이 주소 좌표로 내비를 보냅니다. 기능이 끊기지 않습니다.
 
@@ -83,6 +84,6 @@
 2. **공조 스크립트/스킬**: `auto_conditioning_start` 직후 `set_temps`로 저장된 온도를 운전석·조수석에 적용합니다.
 3. **웹훅 루틴**: 본문으로 신호를 구분합니다. `test`=확인만, `parking_enter`=퇴근 공조(시간대·하루 1회), `after_blow`=애프터 블로우(켠 경우만, 30분 내 중복 무시, "N분 뒤 시작 예정" 알림 후 대기 상태·시작 시각을 상태 파일에 저장, `after_blow_cancel`·채팅 '취소'면 건너뜀, 시작 직전 P단·주차·`climate_keeper_mode`=off 재확인, 송풍 중 P 이탈 시 즉시 정지, 송풍 뒤 정지·온도 원복).
 4. **메일 루틴(있으면)**: 제목 `[테슬라]`와 `[위치]`를 모두 인식하도록 고칩니다.
-5. **일정 기반 루틴/스킬**: 출발 계획을 잡을 때 장소 지오코딩 → (키가 있으면) 지역 검색 '목적지명 주차장', title(HTML 제거·공백 무시)에 목적지명이 든 결과만 후보, 500m는 보조 필터 → 1개 자동 / 여러 개 질문 후 상태 저장 / 0개 또는 키 없음이면 주소 좌표. 공조 켤 때 `navigation_gps_request {lat, lon, order:0}`, 실패하면 `share`로 주소. 보고에 목적지 종류와 사용한 명령을 넣습니다.
+5. **일정 기반 루틴/스킬**: 출발 계획을 잡을 때 장소 지오코딩 → (키가 있으면) NAVER API HUB 지역 검색(`GET https://naverapihub.apigw.ntruss.com/search/v1/local`, 헤더 `X-NCP-APIGW-API-KEY-ID`/`X-NCP-APIGW-API-KEY`) '목적지명 주차장', title(HTML 제거·공백 무시)에 목적지명이 든 결과만 후보, 500m는 보조 필터 → 1개 자동 / 여러 개 질문 후 상태 저장 / 0개 또는 키 없음이면 주소 좌표. 공조 켤 때 `navigation_gps_request {lat, lon, order:0}`, 실패하면 `share`로 주소. 보고에 목적지 종류와 사용한 명령을 넣습니다.
 6. **사용자 안내 (한 번만, 하나씩)**: 검색 API 키 등록(비밀값 입력 카드로), 메일 말머리·Gmail 필터 변경(메일 방식인 경우), 애프터 블로우 사용 여부와 취소 대기 시간(기본 20분)·취소 버튼 만들기, 캘린더 연결 여부. 안드로이드/아이폰 중 무엇인지 모르면 먼저 묻습니다.
 7. **중복 확인**: 같은 역할의 루틴이 두 개 이상 보이면 사용자에게 알리고 하나만 남기도록 안내합니다.
