@@ -45,6 +45,19 @@
 - 후보 1개면 자동, 여러 개면 출발 계획을 잡을 때 한 번 묻고, 답이 없으면 가장 가까운 후보, 없으면 원래 주소로 보냅니다.
 - 추가 권한이나 재인증은 필요 없습니다(`vehicle_cmds`).
 
+> **📌 네이버 키 한눈에 보기: 같은 NCP 콘솔, 두 곳에서 각각 1쌍**
+>
+> | | ① Maps 키 (필수) | ② 지역 검색 키 (선택) |
+> |---|---|---|
+> | 어디서 | NCP 콘솔 → Services → AI·Application Service → **Maps** → Application 등록 | NCP 콘솔 → Services → Application Services → **NAVER API HUB** → Application 등록 |
+> | 무엇을 체크 | **Directions 15**, **Geocoding** (한 Application에 둘 다) | **지역**(지역 검색 결과 조회, NAVER Search Local API) |
+> | 받는 키 | 1쌍 → `NAVER_MAPS_CLIENT_ID` / `NAVER_MAPS_CLIENT_SECRET` | 1쌍 → `NAVER_SEARCH_CLIENT_ID` / `NAVER_SEARCH_CLIENT_SECRET` |
+> | 쓰는 곳 | 길찾기(출발 시각 계산), 주소→좌표 | 목적지 주차장 찾기(내비 전송)에만 |
+>
+> - Maps에는 지역 검색이 없습니다. 주차장 검색은 ②에서만 됩니다.
+> - developers.naver.com(네이버 개발자센터)은 검색 API 신규 신청을 더 이상 받지 않습니다. ②는 NAVER API HUB에서 받으세요.
+> - 키는 채팅에 붙여 넣지 말고 봇의 비밀값 입력 카드로 넣으세요.
+
 **NAVER API HUB 지역 검색 키 (일정 기반 준비를 쓸 때만 필요)**
 네이버 개발자센터 검색 API는 2026년 7월 31일부터 신규 신청이 막히고 NAVER API HUB로 옮겨졌습니다([공지](https://developers.naver.com/notice/article/32530)).
 1. 네이버 클라우드 플랫폼(NCP) 콘솔 → Services → Application Services → NAVER API HUB → 이용 신청

@@ -170,6 +170,19 @@ Grok Bot에 Google Calendar 등 캘린더 플러그인을 연결해 두면, 봇�
 6. 공조 보고에 결과를 넣습니다: 목적지 종류(선택한 주차장 / 무응답으로 가장 가까운 주차장 / 원래 주소)와 사용한 명령(navigation_gps_request / share / 실패).
 7. 차에 타면 화면의 목적지가 맞는지 한 번 확인하세요.
 
+> **📌 네이버 키 한눈에 보기: 같은 NCP 콘솔, 두 곳에서 각각 1쌍**
+>
+> | | ① Maps 키 (필수) | ② 지역 검색 키 (선택) |
+> |---|---|---|
+> | 어디서 | NCP 콘솔 → Services → AI·Application Service → **Maps** → Application 등록 | NCP 콘솔 → Services → Application Services → **NAVER API HUB** → Application 등록 |
+> | 무엇을 체크 | **Directions 15**, **Geocoding** (한 Application에 둘 다) | **지역**(지역 검색 결과 조회, NAVER Search Local API) |
+> | 받는 키 | 1쌍 → `NAVER_MAPS_CLIENT_ID` / `NAVER_MAPS_CLIENT_SECRET` | 1쌍 → `NAVER_SEARCH_CLIENT_ID` / `NAVER_SEARCH_CLIENT_SECRET` |
+> | 쓰는 곳 | 길찾기(출발 시각 계산), 주소→좌표 | 목적지 주차장 찾기(내비 전송)에만 |
+>
+> - Maps에는 지역 검색이 없습니다. 주차장 검색은 ②에서만 됩니다.
+> - developers.naver.com(네이버 개발자센터)은 검색 API 신규 신청을 더 이상 받지 않습니다. ②는 NAVER API HUB에서 받으세요.
+> - 키는 채팅에 붙여 넣지 말고 봇의 비밀값 입력 카드로 넣으세요.
+
 **지역 검색 키 받는 법 (일정 기반 준비를 쓸 때 필수)**: 네이버 개발자센터의 검색 API는 2026년 7월 31일부터 신규 신청이 막히고 NAVER API HUB로 옮겨졌습니다([공지](https://developers.naver.com/notice/article/32530)). 네이버 클라우드 플랫폼(NCP) 콘솔 → Services → Application Services → NAVER API HUB → 이용 신청 → Application 등록에서 '지역 검색 결과 조회' 선택 → 키 ID/키 발급. 현재 한시적 무료이고 하루 25,000회 한도입니다(유료 전환 시 사전 공지 예정, 이후 요금은 확인되지 않음). 키 ID는 `NAVER_SEARCH_CLIENT_ID`, 키는 `NAVER_SEARCH_CLIENT_SECRET`에 넣습니다. 키는 채팅에 붙여 넣지 말고 봇의 비밀값 입력 카드로 넣으세요. 처음 시작 안내에서 이 단계를 함께 진행합니다.
 
 **기존 사용자**: 이미 봇을 쓰고 있다면 템플릿을 다시 가져오지 말고 [업데이트 가이드](https://fnel-second.github.io/tesla-ready-korea/update.html)를 보세요.
