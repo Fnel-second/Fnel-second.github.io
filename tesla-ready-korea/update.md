@@ -32,7 +32,7 @@ MacroDroid는 무료 체험 기간이 끝나면 매크로가 멈춥니다. 그�
 3. 테스트용 흐름으로 본문 `"test"`를 보내 확인 메시지가 오는지 봅니다.
 4. 본 흐름을 `START` 한 번 눌러 둡니다.
 5. **MacroDroid는 바로 끄지 마세요.** 실제 퇴근길에 Automate로 한 번 제대로 켜지는 걸 확인한 뒤 MacroDroid 매크로를 끄세요. 둘 다 켜 두면 신호가 두 번 갑니다 (공조는 하루 한 번만 켜지지만 보고가 두 번 올 수 있음).
-6. 애프터 블로우·취소 버튼·메일 방식을 쓰고 있었다면 4절과 본 가이드 6절을 보고 Automate로 옮깁니다 (이 부분은 아직 테스트 전).
+6. 애프터 블로우·취소 버튼·메일 방식을 쓰고 있었다면 4절과 본 가이드 6절을 보고 Automate로 옮깁니다.
 
 ### 1. 메일 말머리 `[위치]` → `[테슬라]` (메일 방식을 쓰는 분만)
 
@@ -81,9 +81,9 @@ MacroDroid는 무료 체험 기간이 끝나면 매크로가 멈춥니다. 그�
 
 주차 후 잠깐 송풍해 에어컨 쪽 습기를 말리는 우회 기능입니다. 테슬라 공식 기능은 아닙니다. 쓰려면 봇에게 "애프터 블로우 켜줘"라고 하고, 폰 자동화를 하나 더 만듭니다.
 
-| 항목 | 안드로이드 (Automate, 테스트 전) | 아이폰 (단축어) |
+| 항목 | 안드로이드 (Automate) | 아이폰 (단축어) |
 |---|---|---|
-| 트리거 | 별도 작은 흐름: `Flow beginning` → `Bluetooth device connected`(블루투스 기기 연결됨, `Proceed`=`When changed`, `Device name`/`Device address`에 차량 블루투스 선택) → `NO`(연결 끊김)를 `HTTP request`에 연결 → 그 `OK`를 다시 `Bluetooth device connected`의 `IN`으로 (테스트 전) | '블루투스 연결 해제'(차량) 또는 'CarPlay 연결 해제', '즉시 실행' ¹ |
+| 트리거 | 별도 작은 흐름: `Flow beginning` → `Bluetooth device connected`(블루투스 기기 연결됨, `Proceed`=`When changed`, `Device name`/`Device address`에 차량 블루투스 선택) → `NO`(연결 끊김)를 `HTTP request`에 연결 → 그 `OK`를 다시 `Bluetooth device connected`의 `IN`으로 | '블루투스 연결 해제'(차량) 또는 'CarPlay 연결 해제', '즉시 실행' ¹ |
 | 웹훅 | `HTTP request`, 본문 `"after_blow"` (따옴표 포함) | 'URL의 콘텐츠 가져오기', 본문 `after_blow` ¹ |
 | 메일 | `Gmail send`, 제목 `[테슬라] after_blow` | 제목 `[테슬라] after_blow`, 보내기 전 확인 끄기 ¹ |
 

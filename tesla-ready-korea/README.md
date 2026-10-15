@@ -149,7 +149,7 @@ Automate는 메뉴가 영어로만 나옵니다. 아래 영어 이름은 화면�
 웹훅 설정이 부담스러우면 메일로 신호를 보내는 방법도 있습니다. 대신 Grok Bot이 5분마다 메일을 확인하기 때문에 최대 5분 늦게 켜집니다.
 
 1. 폰 자동화의 동작을 메일 보내기로 바꿉니다 (받는 사람: 내 Gmail 주소, 제목: `[테슬라] parking_enter`).
-   - 안드로이드: Automate의 Gmail 보내기 블록(`Gmail send`)을 `HTTP request` 대신 넣고, 받는 사람과 제목은 위와 같이 (테스트 전)
+   - 안드로이드: Automate의 Gmail 보내기 블록(`Gmail send`)을 `HTTP request` 대신 넣고, 받는 사람과 제목은 위와 같이
    - 아이폰: 단축어 동작 '메일 보내기', '보내기 전 확인'(또는 '보내기 전에 표시') 끄기 (iOS 버전마다 이름이 다를 수 있음). 끄지 못하면 자동 발송이 안 될 수 있습니다 (추측).
 2. Gmail에서 필터를 만듭니다. 보낸 사람이 내 주소이고 제목에 `[테슬라]`가 들어간 메일은 받은편지함을 건너뛰고 라벨 `테슬라`를 붙이게 합니다. 받은편지함이 지저분해지지 않습니다.
 3. Grok Bot에 Gmail 커넥터를 연결합니다.
@@ -242,17 +242,17 @@ Grok Bot에 Google Calendar 등 캘린더 플러그인을 연결해 두면, 봇�
 
 | 취소 버튼 | 안드로이드 (Automate) | 아이폰 (단축어) |
 |---|---|---|
-| 만들기 | 작은 흐름 따로 만들기: `Flow beginning` → `HTTP request`(4절과 같은 값, 본문 `"after_blow_cancel"`). 취소할 때 이 흐름을 `START` (홈 화면 바로가기/위젯으로 꺼내 두면 편함, 추측). 메일이면 `Gmail send` 제목 `[테슬라] after_blow_cancel` (테스트 전) | 새 단축어 'URL의 콘텐츠 가져오기' 본문 `after_blow_cancel`(또는 메일 제목 `[테슬라] after_blow_cancel`) → 홈 화면에 추가 또는 위젯 ¹ |
+| 만들기 | 작은 흐름 따로 만들기: `Flow beginning` → `HTTP request`(4절과 같은 값, 본문 `"after_blow_cancel"`). 취소할 때 이 흐름을 `START` (홈 화면 바로가기/위젯으로 꺼내 두면 편함, 추측). 메일이면 `Gmail send` 제목 `[테슬라] after_blow_cancel` | 새 단축어 'URL의 콘텐츠 가져오기' 본문 `after_blow_cancel`(또는 메일 제목 `[테슬라] after_blow_cancel`) → 홈 화면에 추가 또는 위젯 ¹ |
 
 - 하루 횟수 제한은 없고 주행할 때마다 쓸 수 있습니다. 다만 중복 신호(예: 30분 안에 다시 온 신호)는 무시합니다.
 
 **신호 보내는 방법 (4가지)**
 
-| 항목 | 안드로이드 (Automate, 테스트 전) | 아이폰 (단축어 > 자동화 > 개인 자동화) |
+| 항목 | 안드로이드 (Automate) | 아이폰 (단축어 > 자동화 > 개인 자동화) |
 |---|---|---|
-| 트리거 | 별도 작은 흐름: `Flow beginning` → `Bluetooth device connected`(블루투스 기기 연결됨, `Proceed`=`When changed`, `Device name`/`Device address`에 차량 블루투스 선택) → `NO`(연결 끊김)를 `HTTP request`에 연결 → 그 `OK`를 다시 `Bluetooth device connected`의 `IN`으로 (테스트 전) | '블루투스 연결 해제'(차량 선택) 또는 'CarPlay 연결 해제' ¹, '즉시 실행' 켜고 '실행 시 알림' |
+| 트리거 | 별도 작은 흐름: `Flow beginning` → `Bluetooth device connected`(블루투스 기기 연결됨, `Proceed`=`When changed`, `Device name`/`Device address`에 차량 블루투스 선택) → `NO`(연결 끊김)를 `HTTP request`에 연결 → 그 `OK`를 다시 `Bluetooth device connected`의 `IN`으로 | '블루투스 연결 해제'(차량 선택) 또는 'CarPlay 연결 해제' ¹, '즉시 실행' 켜고 '실행 시 알림' |
 | 웹훅 | `HTTP request` (4절과 같은 값), 본문 `"after_blow"` | 'URL의 콘텐츠 가져오기' (4절과 같음), 본문 `after_blow` |
-| 메일 | `Gmail send`, 제목 `[테슬라] after_blow` (테스트 전) | '메일 보내기', 제목 `[테슬라] after_blow`, 보내기 전 확인 끄기 ¹ |
+| 메일 | `Gmail send`, 제목 `[테슬라] after_blow` | '메일 보내기', 제목 `[테슬라] after_blow`, 보내기 전 확인 끄기 ¹ |
 
 ¹ iOS 버전마다 이름이 다를 수 있음.
 - 안드로이드(Automate)는 차량 블루투스가 끊길 때 신호를 보내므로 어디에 주차하든 작동합니다. 주차장 흐름(3블록)과 따로 만들고, 합쳐 5블록에 취소 흐름(2블록)을 더해도 무료 한도 30블록 안입니다. 주차장 흐름의 2번 `NO`는 그대로 2번 `IN`으로만 연결합니다. 이 블루투스 흐름과 Gmail 방식은 아직 테스트하지 않았습니다. `START`는 흐름마다 한 번만 누르세요.
