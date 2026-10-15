@@ -250,7 +250,7 @@ Grok Bot에 Google Calendar 등 캘린더 플러그인을 연결해 두면, 봇�
 
 | 항목 | 안드로이드 (Automate) | 아이폰 (단축어 > 자동화 > 개인 자동화) |
 |---|---|---|
-| 트리거 | 별도 작은 흐름: `Flow beginning` → `Bluetooth device connected`(블루투스 기기 연결됨, `Proceed`=`When changed`, `Device name`/`Device address`에 차량 블루투스 선택) → `NO`(연결 끊김)를 `HTTP request`에 연결 → 그 `OK`를 다시 `Bluetooth device connected`의 `IN`으로 | '블루투스 연결 해제'(차량 선택) 또는 'CarPlay 연결 해제' ¹, '즉시 실행' 켜고 '실행 시 알림' |
+| 트리거 | 별도 작은 흐름: `Flow beginning` → `Bluetooth device connected`(블루투스 기기 연결됨, `Proceed`=`When changed`, `Device name`/`Device address`에 차량 블루투스 선택) → `NO`(연결 끊김)를 `HTTP request`에 연결 → 그 `OK`와 `YES`(연결됨)를 다시 `Bluetooth device connected`의 `IN`으로 | '블루투스 연결 해제'(차량 선택) 또는 'CarPlay 연결 해제' ¹, '즉시 실행' 켜고 '실행 시 알림' |
 | 웹훅 | `HTTP request` (4절과 같은 값), 본문 `"after_blow"` | 'URL의 콘텐츠 가져오기' (4절과 같음), 본문 `after_blow` |
 | 메일 | `Gmail send`, 제목 `[테슬라] after_blow` | '메일 보내기', 제목 `[테슬라] after_blow`, 보내기 전 확인 끄기 ¹ |
 

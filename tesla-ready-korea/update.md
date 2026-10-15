@@ -83,7 +83,7 @@ MacroDroid는 무료 체험 기간이 끝나면 매크로가 멈춥니다. 그�
 
 | 항목 | 안드로이드 (Automate) | 아이폰 (단축어) |
 |---|---|---|
-| 트리거 | 별도 작은 흐름: `Flow beginning` → `Bluetooth device connected`(블루투스 기기 연결됨, `Proceed`=`When changed`, `Device name`/`Device address`에 차량 블루투스 선택) → `NO`(연결 끊김)를 `HTTP request`에 연결 → 그 `OK`를 다시 `Bluetooth device connected`의 `IN`으로 | '블루투스 연결 해제'(차량) 또는 'CarPlay 연결 해제', '즉시 실행' ¹ |
+| 트리거 | 별도 작은 흐름: `Flow beginning` → `Bluetooth device connected`(블루투스 기기 연결됨, `Proceed`=`When changed`, `Device name`/`Device address`에 차량 블루투스 선택) → `NO`(연결 끊김)를 `HTTP request`에 연결 → 그 `OK`와 `YES`(연결됨)를 다시 `Bluetooth device connected`의 `IN`으로 | '블루투스 연결 해제'(차량) 또는 'CarPlay 연결 해제', '즉시 실행' ¹ |
 | 웹훅 | `HTTP request`, 본문 `"after_blow"` (따옴표 포함) | 'URL의 콘텐츠 가져오기', 본문 `after_blow` ¹ |
 | 메일 | `Gmail send`, 제목 `[테슬라] after_blow` | 제목 `[테슬라] after_blow`, 보내기 전 확인 끄기 ¹ |
 
