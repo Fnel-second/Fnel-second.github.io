@@ -1,7 +1,10 @@
 # 🚗 Tesla Ready Korea: 퇴근길 테슬라 공조 자동으로 켜기
 
-주차장에 들어서면 테슬라 공조가 알아서 켜집니다. 일정이 있는 날에는 실시간 교통을 보고 출발 시간에 맞춰 공조를 켜 줍니다.
-Grok Bot, 공식 Tesla Fleet API, 안드로이드 MacroDroid 또는 아이폰 단축어, 네이버 지도 API를 조합했고, 실제로 매일 쓰고 있는 설정입니다.
+주차장에 들어서면 테슬라 공조가 알아서 켜집니다. 주차장은 여러 곳을 등록할 수 있습니다. 일정이 있는 날에는 실시간 교통을 보고 출발 시간에 맞춰 공조를 켜고, 목적지 건물 주차장을 차량 내비로 보내 줍니다.
+Grok Bot, 공식 Tesla Fleet API, 폰 자동화(안드로이드는 전용 **Tesla Ready app** 권장, MacroDroid는 대안 / 아이폰은 단축어), 네이버 지도 API를 조합했고, 실제로 매일 쓰고 있는 설정입니다.
+
+- 선택 기능으로 애프터 블로우가 있습니다. 주차 후 송풍으로 습기를 말리는 기능이고, 취소 버튼도 있습니다. 앱 쪽 동작은 아직 검증 전입니다.
+- 봇이 주 1회 업데이트 가이드를 확인해서, 바뀐 점이 있으면 알려 주고 동의를 받은 뒤 적용합니다.
 
 👉 템플릿: [Tesla Ready Korea 템플릿](https://x.ai/bot/OyebNt77l1YA-GIB_7T5M)
 (템플릿을 가져오면 봇이 첫 대화에서 아래 설정을 하나씩 물어보며 같이 진행합니다.)
@@ -11,7 +14,7 @@ Grok Bot, 공식 Tesla Fleet API, 안드로이드 MacroDroid 또는 아이폰 �
 ## 어떻게 동작하나요
 
 ```
-[폰 MacroDroid / 아이폰 단축어] 주차장 진입
+[폰 Tesla Ready app / MacroDroid / 아이폰 단축어] 주차장 진입
    → HTTP POST (웹훅)
    → [Grok Bot 루틴] 평일 퇴근 시간대인지, 오늘 이미 켰는지 확인
    → [작업용 컴퓨터] 토큰 갱신 → 명령 서명 프록시
@@ -28,11 +31,11 @@ Grok Bot, 공식 Tesla Fleet API, 안드로이드 MacroDroid 또는 아이폰 �
 
 - 테슬라 차량과 Tesla 계정
 - Grok Bot
-- 폰 자동화 앱: 안드로이드는 MacroDroid(Play 스토어), 아이폰은 기본 단축어 앱 (아이폰은 위치 서비스에서 단축어를 '항상' 허용)
+- 폰 자동화: 안드로이드는 [Tesla Ready app APK](https://github.com/Fnel-second/tesla-ready-app-releases/releases/latest/download/TeslaReadyApp.apk)(권장, 설치법은 4절) 또는 MacroDroid(Play 스토어, 대안), 아이폰은 기본 단축어 앱 (아이폰은 위치 서비스에서 단축어를 '항상' 허용)
 - Gmail (HTTP 요청 대신 메일로 신호를 보낼 때만)
 - GitHub 계정 (공개키 호스팅용 GitHub Pages)
 - 네이버 클라우드 플랫폼 계정 (일정 기반 기능을 쓸 때만)
-- 네이버 개발자 센터 '검색' API 키 (일정 기반 준비를 쓸 때만 필수. 주차장 우선 목적지용)
+- NAVER API HUB '지역 검색' 키 (네이버 클라우드 콘솔에서 발급, 일정 기반 준비를 쓸 때만 필수. 주차장 우선 목적지용)
 - (선택, 권장) 캘린더 연결: Grok Bot에 Google Calendar 등 캘린더 플러그인 연결 (일정 기반 준비에 필요)
 
 ---
