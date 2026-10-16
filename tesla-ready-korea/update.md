@@ -17,28 +17,27 @@
 1. 둘 중 **하나만 남깁니다** (설정이 많이 쌓인 기존 봇을 권장).
 2. 남기지 않을 봇의 루틴(웹훅 루틴, 메일 루틴, 일정 루틴)을 모두 **일시 중지하거나 삭제**합니다.
 3. 폰 자동화에 들어 있는 웹훅 URL과 키가 **남긴 봇의 것인지** 확인하고, 아니면 남긴 봇의 루틴 패널에서 URL·키를 복사해 다시 넣습니다.
-   - 안드로이드: Automate 흐름의 `HTTP request` 블록 `Request URL`과 `Request headers`
+   - 안드로이드: MacroDroid 매크로의 `HTTP Request` 동작 URL과 `Authorization` 헤더
    - 아이폰: 단축어 자동화의 'URL의 콘텐츠 가져오기' URL과 헤더 ¹
 4. 본문 `test`로 한 번 보내 남긴 봇에서만 확인 메시지가 오는지 봅니다.
 
 ## 바뀐 점과 할 일
 
-### 0. 안드로이드: MacroDroid → Automate로 바꾸기 (안드로이드 사용자)
+### 0. 안드로이드: Automate → MacroDroid로 되돌리기 (안드로이드 사용자)
 
-MacroDroid는 무료 체험 기간이 끝나면 매크로가 멈춥니다. 그래서 안드로이드 방법을 무료로 계속 쓸 수 있는 **Automate(LlamaLab, 무료 버전)**로 바꿨습니다. 무료 버전은 블록 30개까지인데 이 설정은 3개만 씁니다.
+실제 퇴근길에 Automate 흐름이 주차장 신호를 보내지 않은 일이 있어, 안드로이드 방법을 처음 쓰던 **MacroDroid**로 되돌렸습니다. **Automate로 옮겼던 분은 MacroDroid로 다시 바꿔 주세요.**
 
-1. Play 스토어에서 Automate(LlamaLab)를 설치합니다.
-2. [본 가이드 4절 '안드로이드 Automate 단계별 설정'](https://fnel-second.github.io/tesla-ready-korea/)대로 흐름을 만듭니다. 웹훅 URL과 키는 지금 쓰는 것을 그대로 씁니다 (Grok Bot PC 앱의 루틴 패널에서만 보입니다).
-3. 테스트용 흐름으로 본문 `"test"`를 보내 확인 메시지가 오는지 봅니다.
-4. 본 흐름을 `START` 한 번 눌러 둡니다.
-5. **MacroDroid는 바로 끄지 마세요.** 실제 퇴근길에 Automate로 한 번 제대로 켜지는 걸 확인한 뒤 MacroDroid 매크로를 끄세요. 둘 다 켜 두면 신호가 두 번 갑니다 (공조는 하루 한 번만 켜지지만 보고가 두 번 올 수 있음).
-6. 애프터 블로우·취소 버튼·메일 방식을 쓰고 있었다면 4절과 본 가이드 6절을 보고 Automate로 옮깁니다.
+1. MacroDroid가 없으면 Play 스토어에서 설치합니다. 예전 매크로가 남아 있으면 그대로 켜고 아래 값과 같은지 확인합니다.
+2. [본 가이드 4절 '안드로이드 MacroDroid 단계별 설정'](https://fnel-second.github.io/tesla-ready-korea/)대로 매크로를 만듭니다 (`Location Trigger` 구역 진입 → `HTTP Request` POST, `application/json`, 본문 `{"event":"parking_enter"}`, 헤더 `Authorization: Bearer <웹훅 키>`). 웹훅 URL과 키는 지금 쓰는 것을 그대로 씁니다 (Grok Bot PC 앱의 루틴 패널에서만 보입니다).
+3. 테스트용 매크로로 본문 `{"event":"test"}`를 보내 확인 메시지가 오는지 봅니다.
+4. 확인되면 Automate 흐름은 모두 `STOP`하세요. 둘 다 켜 두면 신호가 두 번 갑니다 (공조는 하루 한 번만 켜지지만 보고가 두 번 올 수 있음).
+5. 애프터 블로우·취소 버튼·메일 방식을 쓰고 있었다면 본 가이드 6절대로 MacroDroid 매크로로 옮깁니다.
 
 ### 1. 메일 말머리 `[위치]` → `[테슬라]` (메일 방식을 쓰는 분만)
 
-| 단계 | 안드로이드 (Automate) | 아이폰 (단축어) |
+| 단계 | 안드로이드 (MacroDroid) | 아이폰 (단축어) |
 |---|---|---|
-| 메일 제목 바꾸기 | `Gmail send` 블록 제목을 `[테슬라] parking_enter`로 | '메일 보내기' 동작 제목을 `[테슬라] parking_enter`로 ¹ |
+| 메일 제목 바꾸기 | '이메일 보내기' 동작 제목을 `[테슬라] parking_enter`로 | '메일 보내기' 동작 제목을 `[테슬라] parking_enter`로 ¹ |
 | Gmail 필터 | 조건을 제목 `[테슬라]`로, 라벨을 `테슬라`로 | 같음 |
 
 - 전환 기간 동안 봇은 옛 `[위치]` 메일도 함께 받아 줍니다. 급하게 바꾸지 않아도 됩니다.
@@ -81,13 +80,13 @@ MacroDroid는 무료 체험 기간이 끝나면 매크로가 멈춥니다. 그�
 
 주차 후 잠깐 송풍해 에어컨 쪽 습기를 말리는 우회 기능입니다. 테슬라 공식 기능은 아닙니다. 쓰려면 봇에게 "애프터 블로우 켜줘"라고 하고, 폰 자동화를 하나 더 만듭니다.
 
-| 항목 | 안드로이드 (Automate) | 아이폰 (단축어) |
+| 항목 | 안드로이드 (MacroDroid) | 아이폰 (단축어) |
 |---|---|---|
-| 트리거 | 별도 작은 흐름: `Flow beginning` → `Bluetooth device connected`(블루투스 기기 연결됨, `Proceed`=`When changed`, `Device name`/`Device address`에 차량 블루투스 선택) → `NO`(연결 끊김)를 `HTTP request`에 연결 → 그 `OK`와 `YES`(연결됨)를 다시 `Bluetooth device connected`의 `IN`으로 | '블루투스 연결 해제'(차량) 또는 'CarPlay 연결 해제', '즉시 실행' ¹ |
-| 웹훅 | `HTTP request`, 본문 `"after_blow"` (따옴표 포함) | 'URL의 콘텐츠 가져오기', 본문 `after_blow` ¹ |
-| 메일 | `Gmail send`, 제목 `[테슬라] after_blow` | 제목 `[테슬라] after_blow`, 보내기 전 확인 끄기 ¹ |
+| 트리거 | 새 매크로: `Bluetooth Event` → `Device Disconnected` → 차량 블루투스 기기 | '블루투스 연결 해제'(차량) 또는 'CarPlay 연결 해제', '즉시 실행' ¹ |
+| 웹훅 | `HTTP Request`(4절과 같은 값), 본문 `{"event":"after_blow"}` | 'URL의 콘텐츠 가져오기', 본문 `after_blow` ¹ |
+| 메일 | '이메일 보내기', 제목 `[테슬라] after_blow` | 제목 `[테슬라] after_blow`, 보내기 전 확인 끄기 ¹ |
 
-- **동승자 보호**: 신호를 받으면 바로 켜지 않고 "애프터 블로우 N분 뒤 시작 예정"을 알린 뒤 기다립니다(기본 20분, 봇이 물어봄). 취소는 웹훅 본문 `after_blow_cancel`, 메일 제목 `[테슬라] after_blow_cancel`, 또는 채팅에 '취소'. 홈 화면 취소 버튼을 만들어 두세요(안드로이드: Automate에 `Flow beginning` → `HTTP request`(본문 `"after_blow_cancel"`) 작은 흐름을 따로 만들어 취소할 때 `START` / 아이폰: 단축어를 홈 화면·위젯에 추가 ¹).
+- **동승자 보호**: 신호를 받으면 바로 켜지 않고 "애프터 블로우 N분 뒤 시작 예정"을 알린 뒤 기다립니다(기본 20분, 봇이 물어봄). 취소는 웹훅 본문 `after_blow_cancel`, 메일 제목 `[테슬라] after_blow_cancel`, 또는 채팅에 '취소'. 홈 화면 취소 버튼을 만들어 두세요(안드로이드: MacroDroid 새 매크로 트리거 `Shortcut Launched` → `HTTP Request`(본문 `{"event":"after_blow_cancel"}`), 홈 화면 바로가기나 MacroDroid 위젯으로 꺼내 두기 / 아이폰: 단축어를 홈 화면·위젯에 추가 ¹).
 - 캠프·도그 모드가 켜져 있으면 건너뛰고(API로 읽을 수 있는지 확인 필요, 추측), 송풍 중 기어가 P에서 벗어나면 즉시 멈추고 온도를 되돌립니다. API로는 차 안에 사람이 있는지 알 수 없습니다 (추측).
 - API로는 내기/외기 순환을 바꿀 수 없습니다. 차에서 Auto나 외기로 두면 효과가 더 좋을 수 있습니다 (추측).
 
@@ -109,5 +108,5 @@ MacroDroid는 무료 체험 기간이 끝나면 매크로가 멈춥니다. 그�
 3. **웹훅 루틴**: 본문으로 신호를 구분합니다. `test`=확인만, `parking_enter`=퇴근 공조(시간대·하루 1회), `after_blow`=애프터 블로우(켠 경우만, 30분 내 중복 무시, "N분 뒤 시작 예정" 알림 후 대기 상태·시작 시각을 상태 파일에 저장, `after_blow_cancel`·채팅 '취소'면 건너뜀, 시작 직전 P단·주차·`climate_keeper_mode`=off 재확인, 송풍 중 P 이탈 시 즉시 정지, 송풍 뒤 정지·온도 원복).
 4. **메일 루틴(있으면)**: 제목 `[테슬라]`와 `[위치]`를 모두 인식하도록 고칩니다.
 5. **일정 기반 루틴/스킬**: 출발 계획을 잡을 때 장소 지오코딩 → (키가 있으면) NAVER API HUB 지역 검색(`GET https://naverapihub.apigw.ntruss.com/search/v1/local`, 헤더 `X-NCP-APIGW-API-KEY-ID`/`X-NCP-APIGW-API-KEY`) '목적지명 주차장', title(HTML 제거·공백 무시)에 목적지명이 든 결과만 후보, 500m는 보조 필터 → 1개 자동 / 여러 개 질문 후 상태 저장 / 0개 또는 키 없음이면 주소 좌표. 공조 켤 때 `navigation_gps_request {lat, lon, order:0}`, 실패하면 `share`로 주소. 보고에 목적지 종류와 사용한 명령을 넣습니다.
-6. **사용자 안내 (한 번만, 하나씩)**: 안드로이드 사용자면 MacroDroid → Automate 전환(본 가이드 4절, 실제 퇴근길 1회 확인 뒤 MacroDroid 끄기), 검색 API 키 등록(비밀값 입력 카드로), 메일 말머리·Gmail 필터 변경(메일 방식인 경우), 애프터 블로우 사용 여부와 취소 대기 시간(기본 20분)·취소 버튼 만들기, 캘린더 연결 여부. 안드로이드/아이폰 중 무엇인지 모르면 먼저 묻습니다.
+6. **사용자 안내 (한 번만, 하나씩)**: 안드로이드 사용자면 Automate → MacroDroid로 되돌리기(본 가이드 4절, 테스트 확인 뒤 Automate 흐름 STOP), 검색 API 키 등록(비밀값 입력 카드로), 메일 말머리·Gmail 필터 변경(메일 방식인 경우), 애프터 블로우 사용 여부와 취소 대기 시간(기본 20분)·취소 버튼 만들기, 캘린더 연결 여부. 안드로이드/아이폰 중 무엇인지 모르면 먼저 묻습니다.
 7. **중복 확인**: 같은 역할의 루틴이 두 개 이상 보이면 사용자에게 알리고 하나만 남기도록 안내합니다.
