@@ -1,7 +1,7 @@
 # 🚗 Tesla Ready North America: Auto-start your Tesla's climate on the way out
 
 Walk into your parking garage and your Tesla's climate turns on by itself. On days with a calendar event, it checks live traffic and starts climate right on time for your departure.
-Built with Grok Bot, the official Tesla Fleet API, Android MacroDroid or iPhone Shortcuts, and the Google Maps Platform.
+Built with Grok Bot, the official Tesla Fleet API, a phone automation (Android: the Tesla Ready app recommended, MacroDroid as an alternative / iPhone: Shortcuts), and the Google Maps Platform.
 
 👉 Template: [Tesla Ready North America template](TEMPLATE_LINK_TBD)
 (After you import the template, the bot walks you through the setup below in your first chat, one question at a time.)
@@ -30,7 +30,7 @@ For calendar-based prep, the bot also sends the event location to your car's nav
 
 - A Tesla and a Tesla account
 - Grok Bot
-- A phone automation app: MacroDroid on Android, or the built-in Shortcuts app on iPhone (allow Shortcuts location access "Always")
+- A phone automation app: on Android the [Tesla Ready app APK](https://github.com/Fnel-second/tesla-ready-app-releases/releases/latest/download/TeslaReadyApp.apk) (recommended, see section 4) or MacroDroid (alternative), or the built-in Shortcuts app on iPhone (allow Shortcuts location access "Always")
 - Gmail (only if you send signals by email instead of HTTP)
 - A GitHub account (GitHub Pages hosts your public key)
 - A Google Cloud account with billing enabled (only for calendar-based prep)
@@ -100,10 +100,48 @@ Note: the Fleet API takes temperatures in °C. The bot stores your setting in °
   - `parking_enter`: commute climate
   - `after_blow`: after-blow (section 6, only if enabled)
   - `after_blow_cancel`: cancels a pending after-blow
+- The bot accepts both formats: a plain-text body (e.g. `parking_enter`, used by MacroDroid and Shortcuts) or JSON with an `event` field (e.g. `{"event":"parking_enter","place":"<name>"}`, sent by the Tesla Ready app). If `place` is present it's included in the report; signals without it are handled the same way.
 - For `parking_enter`: if it's a weekday between 5:30 PM and 11:00 PM (change to suit you) and climate hasn't started today, the script runs. On failure it retries once.
 - The routine panel shows the webhook URL and key. If you're setting up from the Grok Bot phone app, the URL and key are currently only visible on PC, so copy them on a PC and move them to your phone. Delete any copies you used to move them (messages, email, etc.).
 
-## 4. Phone automation (Android MacroDroid / iPhone Shortcuts)
+## 4. Phone automation (Android Tesla Ready app recommended · MacroDroid alternative / iPhone Shortcuts)
+
+### Android: Tesla Ready app (recommended)
+
+An Android app made for this guide. You don't build macros: enter the webhook URL and key, then pick your parking area. In the Korean edition it was confirmed once on a real commute (parking entry → climate on).
+
+- Download: [Tesla Ready app v1.1.0 APK](https://github.com/Fnel-second/tesla-ready-app-releases/releases/latest/download/TeslaReadyApp.apk) (fixed link, always the latest release). To update, install the new APK over the current app (settings are kept).
+- The app's language follows your phone language. Outside Korea it uses OpenStreetMap only and hides the Naver map field. In the US the radius is shown in ft/mi.
+- ⚠️ The English display and the US settings (map, units) haven't been verified yet (unverified).
+
+**Install**
+1. Allow installing unknown apps for the browser or Files app you open the APK with.
+2. **Play Protect block screen**: don't tap **OK** (that cancels the install). Tap **More details**, then **Install anyway**.
+3. Set location permission to **Allow all the time** when the app asks.
+4. Turn off battery optimization for the app (Unrestricted), or the geofence may fire late or not at all.
+5. Allow notifications to see send results.
+
+**Setup**
+1. **Webhook**: enter the webhook URL and key from the section 3 routine panel.
+2. **Parking area**: pick it on the map and set the radius, or save your current location as the parking area.
+3. **Test**: tap the test button. It sends `{"event":"test"}` and you should get only a confirmation message (climate doesn't start).
+
+**Signals the app sends** (header `Authorization: Bearer <webhook key>`, JSON body)
+
+| When | Body |
+|---|---|
+| Entering the parking area | `{"event":"parking_enter","place":"<name>"}` |
+| Test button | `{"event":"test"}` |
+| Car Bluetooth disconnects (after-blow, section 6) ⚠️ not yet verified | `{"event":"after_blow"}` |
+| The app's cancel button ⚠️ not yet verified | `{"event":"after_blow_cancel"}` |
+
+- If you don't use after-blow, leave the car Bluetooth setting in the app empty.
+- If you used to send the parking signal with MacroDroid, turn that macro off once the app test works, so the signal isn't sent twice.
+
+### Android alternative: MacroDroid / iPhone: Shortcuts
+
+Use MacroDroid if you can't or don't want to use the Tesla Ready app.
+
 
 | Item | Android (MacroDroid) | iPhone (Shortcuts) |
 |---|---|---|
@@ -212,7 +250,11 @@ A few events a day with 3–4 recalculations is a few hundred requests a month, 
 
 **Sending the signal**
 
-**Android (MacroDroid)**
+**Android (Tesla Ready app)** ⚠️ not yet verified
+- Choose your car's Bluetooth in the app settings. When it disconnects, the app sends `{"event":"after_blow"}`. The app also has a cancel button (not yet verified); cancelling by replying "cancel" in chat always works.
+- If you use the MacroDroid after-blow macro instead, leave the app's car Bluetooth empty so it isn't sent twice.
+
+**Android alternative (MacroDroid)**
 - New macro, trigger "Bluetooth Disconnected" → your car (fires wherever you park)
 - Action: HTTP Request (as in section 4), body `after_blow`
 - Email alternative: "Send Email", subject `[Tesla] after_blow`
@@ -234,7 +276,8 @@ A few events a day with 3–4 recalculations is a few hundred requests a month, 
 ## Testing
 
 1. Send body `test`. A confirmation message means it's connected.
-   - Android: run the macro manually in MacroDroid and check the response code toast
+   - Android (Tesla Ready app): tap the test button; you should get the bot's confirmation message
+   - Android (MacroDroid): run the macro manually in MacroDroid and check the response code toast
    - iPhone: run a shortcut with the same action manually and check "Show Notification" (names may differ by iOS version)
 2. Send `parking_enter` within your window to actually start climate.
 
@@ -245,7 +288,8 @@ A few events a day with 3–4 recalculations is a few hundred requests a month, 
 | HTTP 415 | Set body content type to `text/plain` or `application/json` |
 | 401 / 403 | Check header `Authorization: Bearer <key>` |
 | 404 | URL may be cut off; copy it again |
-| Response code 0 | Check phone network, MacroDroid permissions, and that battery optimization is off for MacroDroid |
+| Response code 0 / app send fails | Check phone network, location "Allow all the time", and that battery optimization is off for the Tesla Ready app or MacroDroid |
+| App install blocked by Play Protect | Tap "More details" → "Install anyway" (not OK) |
 | iPhone arrival doesn't fire | Location Services: Shortcuts "Always", "Run Immediately" on, widen the arrival radius |
 | iPhone email doesn't auto-send | Turn off "Show Compose Sheet"; otherwise use the webhook |
 | Wake 406 | Add body `{}` and Content-Type |
@@ -263,7 +307,7 @@ A few events a day with 3–4 recalculations is a few hundred requests a month, 
 | Climate temperature | Default 70°F (set each time climate starts) |
 | Units | °F and miles (default) |
 | Commute days and window | e.g. weekdays 5:30–11:00 PM |
-| Parking location (geofence) | Android: MacroDroid location trigger / iPhone: Shortcuts "Arrive" location and radius |
+| Parking location (geofence) | Android: Tesla Ready app parking area (or MacroDroid location trigger) / iPhone: Shortcuts "Arrive" location and radius |
 | Walk time to car | e.g. home 2 min, work 15 min |
 | Climate lead time | e.g. 10 min before car departs |
 | Auto-send nav destination | On / off (default on, calendar prep only) |
