@@ -1,7 +1,7 @@
 # 🚗 Tesla Ready North America: Auto-start your Tesla's climate on the way out
 
 Walk into your parking garage and your Tesla's climate turns on by itself. On days with a calendar event, it checks live traffic and starts climate right on time for your departure.
-Built with Grok Bot, the official Tesla Fleet API, Android Automate (LlamaLab) or iPhone Shortcuts, and the Google Maps Platform.
+Built with Grok Bot, the official Tesla Fleet API, Android MacroDroid or iPhone Shortcuts, and the Google Maps Platform.
 
 👉 Template: [Tesla Ready North America template](TEMPLATE_LINK_TBD)
 (After you import the template, the bot walks you through the setup below in your first chat, one question at a time.)
@@ -13,7 +13,7 @@ Built with Grok Bot, the official Tesla Fleet API, Android Automate (LlamaLab) o
 ## How it works
 
 ```
-[Phone: Automate / iPhone Shortcuts] enters parking area
+[Phone: MacroDroid / iPhone Shortcuts] enters parking area
    → HTTP POST (webhook)
    → [Grok Bot routine] Is it within your commute window? Already started today?
    → [Bot's computer] refresh token → command-signing proxy
@@ -30,7 +30,7 @@ For calendar-based prep, the bot also sends the event location to your car's nav
 
 - A Tesla and a Tesla account
 - Grok Bot
-- A phone automation app: Automate by LlamaLab (free) on Android, or the built-in Shortcuts app on iPhone (allow Shortcuts location access "Always")
+- A phone automation app: MacroDroid on Android, or the built-in Shortcuts app on iPhone (allow Shortcuts location access "Always")
 - Gmail (only if you send signals by email instead of HTTP)
 - A GitHub account (GitHub Pages hosts your public key)
 - A Google Cloud account with billing enabled (only for calendar-based prep)
@@ -58,7 +58,7 @@ Difficulty is medium-high, but Grok Bot does most of the technical work on its o
 6. Approve the virtual key in the Tesla app or on the car's screen
 7. Confirm a payment method on the Tesla developer billing page
 8. (Calendar prep only) Create a Google Maps Platform API key and enter it via the bot's secret-entry card
-9. Build the phone automation: an Android Automate flow or an iPhone Shortcuts personal automation (section 4)
+9. Build the phone automation: an Android MacroDroid macro or an iPhone Shortcuts personal automation (section 4)
 
 If you get stuck, send the bot a screenshot of that screen. Sections 1–3 below explain what the bot does, for the curious.
 
@@ -103,56 +103,24 @@ Note: the Fleet API takes temperatures in °C. The bot stores your setting in °
 - For `parking_enter`: if it's a weekday between 5:30 PM and 11:00 PM (change to suit you) and climate hasn't started today, the script runs. On failure it retries once.
 - The routine panel shows the webhook URL and key. If you're setting up from the Grok Bot phone app, the URL and key are currently only visible on PC, so copy them on a PC and move them to your phone. Delete any copies you used to move them (messages, email, etc.).
 
-## 4. Phone automation (Android Automate / iPhone Shortcuts)
+## 4. Phone automation (Android MacroDroid / iPhone Shortcuts)
 
-Android uses **Automate** by LlamaLab (free version, Google Play). We switched from MacroDroid because MacroDroid macros stop running when its free trial ends. Automate's menus are English-only; the steps below name each block and field exactly.
-
-### Android (Automate): parking flow
-
-1. Install **Automate** (LlamaLab) from Google Play and open it. Tap **+** (bottom right) to create a new flow. The flow already contains a **Flow beginning** block.
-2. Tap the **+** button in the flow editor, search **Location at**, and add it. Connect **Flow beginning**'s OK dot to **Location at**'s IN dot (drag from dot to dot).
-3. Tap **Location at** to edit it:
-   - **Proceed**: **When changed**.
-   - **Latitude** / **Longitude**: type the parking area's coordinates as plain numbers (e.g. `37.4220` / `-122.0841`). Leave **fx** off for each field (plain number input, not an expression).
-   - **Radius**: type it **last** (e.g. `150` meters). Opening **PICK LOCATION ON MAP** resets the radius, so if you use the map picker, enter the radius again afterwards.
-   - Tap **Done**.
-4. Add an **HTTP request** block. Connect **Location at**'s **YES** dot to **HTTP request**'s IN. Edit it:
-   - **Request URL**: `<webhook URL>`
-   - **Request method**: `POST`
-   - **Request content type**: **Text**
-   - **Request content body**: `"parking_enter"` (type it with the double quotes; Automate treats quoted text as a literal string)
-   - **Request headers**: `{"Authorization": "Bearer <webhook key>"}`
-   - **Save response**: **Don't save**
-   - Tap **Done**.
-5. Loop the flow so it keeps watching:
-   - Connect **HTTP request**'s **OK** dot back to **Location at**'s **IN**.
-   - Connect **Location at**'s **NO** dot back to **Location at**'s **IN**.
-6. Name the flow (e.g. `Tesla parking`), tap the save (✓) icon, then tap **Start**. When asked, grant privileges:
-   - **Location** with background access ("Allow all the time")
-   - **Ignore battery optimization** and disable hibernation / "pause app activity if unused" for Automate
-   - **Notifications**
-   - **File access**, if asked
-7. Automate shows a persistent "running" notification. You can minimize it (long-press the notification → set it to silent/minimized), but **don't disable it**, or Android may kill the flow.
-
-**Migrating from MacroDroid:** keep the MacroDroid macro on until the Automate flow has fired once on a real trip (you get the climate message). Then turn the MacroDroid macro off so the signal isn't sent twice.
-
-### iPhone (Shortcuts)
-
-| Item | iPhone (Shortcuts) |
-|---|---|
-| Where | Shortcuts app > Automation > Personal Automation |
-| Parking trigger | "Arrive" (location: parking area, set radius) |
-| Run automatically | Turn on "Run Immediately", choose "Notify When Run" ¹ |
-| Webhook action | "Get Contents of URL" |
-| Method / URL | Method `POST`, URL `<webhook URL>` |
-| Header | `Authorization` = `Bearer <webhook key>` |
-| Body | Request Body "Text" `parking_enter` (if Text isn't offered, JSON `event` = `parking_enter`) ¹ |
-| Permission | Settings > Privacy & Security > Location Services > Shortcuts "Always" ¹ |
-| Check result | Add "Show Notification" to display the result ¹ |
+| Item | Android (MacroDroid) | iPhone (Shortcuts) |
+|---|---|---|
+| Where | Add Macro | Shortcuts app > Automation > Personal Automation |
+| Parking trigger | Location (geofence), enter parking area | "Arrive" (location: parking area, set radius) |
+| Run automatically | Runs immediately by default | Turn on "Run Immediately", choose "Notify When Run" ¹ |
+| Webhook action | HTTP Request | "Get Contents of URL" |
+| Method / URL | `POST`, `<webhook URL>` | Method `POST`, URL `<webhook URL>` |
+| Header | `Authorization` = `Bearer <webhook key>` | `Authorization` = `Bearer <webhook key>` |
+| Body | Content type `text/plain`, body `parking_enter` | Request Body "Text" `parking_enter` (if Text isn't offered, JSON `event` = `parking_enter`) ¹ |
+| Permission | MacroDroid location "Allow all the time" | Settings > Privacy & Security > Location Services > Shortcuts "Always" ¹ |
+| Check result | Save HTTP response code to local variable `code` → toast `{lv=code}` | Add "Show Notification" to display the result ¹ |
 
 ¹ Menu names may differ by iOS version. The iPhone method has not been tested directly.
 
-- ⚠️ On Android, the content type must be **Text**, or you may get a 415 error.
+- ⚠️ On Android, if you don't set the content type to `text/plain` you get a 415 error.
+- Android: turn off battery optimization for MacroDroid so the geofence keeps working in the background.
 - (Optional) Also send an email in the same automation as a backup signal. Email is checked every 5 minutes, so it's slower.
 
 ### If HTTP requests are hard (Gmail method)
@@ -160,7 +128,7 @@ Android uses **Automate** by LlamaLab (free version, Google Play). We switched f
 Instead of a webhook, you can signal by email. Grok Bot checks mail every 5 minutes, so climate can start up to 5 minutes late.
 
 1. Change the phone action to send an email (To: your Gmail address, Subject: `[Tesla] parking_enter`).
-   - Android: Automate block "Email send" (or your mail app's share action)
+   - Android: MacroDroid action "Send Email"
    - iPhone: Shortcuts action "Send Email", turn off "Show Compose Sheet" (name may differ by iOS version). If you can't turn it off, it may not send automatically (unverified).
 2. Create a Gmail filter: from your own address, subject contains `[Tesla]` → Skip the Inbox, apply label `Tesla`. Keeps your inbox clean.
 3. Connect the Gmail connector to Grok Bot.
@@ -244,16 +212,15 @@ A few events a day with 3–4 recalculations is a few hundred requests a month, 
 
 **Sending the signal**
 
-**Android (Automate): after-blow flow** (a separate flow from the parking flow)
-1. New flow → **Flow beginning** → add **Bluetooth device connected**, connect OK → IN.
-2. Edit **Bluetooth device connected**: **Proceed**: **When changed**; **Device**: pick your car. Tap **Done**.
-3. Add **HTTP request** (same URL, method, content type Text, headers and Save response as section 4) with body `"after_blow"`. Connect **Bluetooth device connected**'s **NO** dot (disconnected) → **HTTP request** IN.
-4. Connect **HTTP request** OK → back to **Bluetooth device connected** IN (and its YES → back to its own IN) so it keeps watching. Save and **Start**; grant Bluetooth/nearby devices permission if asked.
+**Android (MacroDroid)**
+- New macro, trigger "Bluetooth Disconnected" → your car (fires wherever you park)
+- Action: HTTP Request (as in section 4), body `after_blow`
+- Email alternative: "Send Email", subject `[Tesla] after_blow`
 
 **iPhone (Shortcuts > Automation > Personal Automation)**
 - Trigger: "Bluetooth" disconnect (choose car) or "CarPlay" disconnect ¹, "Run Immediately" on, "Notify When Run"
 - Action: "Get Contents of URL" (as in section 4), body `after_blow`
-- Email alternative (both platforms): subject `[Tesla] after_blow` (iPhone: compose sheet off ¹)
+- Email alternative: subject `[Tesla] after_blow`, compose sheet off ¹
 
 ¹ Names may differ by iOS version.
 - Email can be up to 5 minutes late, which is fine for after-blow (estimate).
@@ -267,7 +234,7 @@ A few events a day with 3–4 recalculations is a few hundred requests a month, 
 ## Testing
 
 1. Send body `test`. A confirmation message means it's connected.
-   - Android: in Automate, temporarily make a copy of the HTTP request flow with body `"test"` (Flow beginning → HTTP request) and start it; you should get the bot's confirmation message
+   - Android: run the macro manually in MacroDroid and check the response code toast
    - iPhone: run a shortcut with the same action manually and check "Show Notification" (names may differ by iOS version)
 2. Send `parking_enter` within your window to actually start climate.
 
@@ -278,7 +245,7 @@ A few events a day with 3–4 recalculations is a few hundred requests a month, 
 | HTTP 415 | Set body content type to `text/plain` or `application/json` |
 | 401 / 403 | Check header `Authorization: Bearer <key>` |
 | 404 | URL may be cut off; copy it again |
-| Response code 0 | Check phone network and Automate privileges (background location, battery optimization ignored, notification not disabled) |
+| Response code 0 | Check phone network, MacroDroid permissions, and that battery optimization is off for MacroDroid |
 | iPhone arrival doesn't fire | Location Services: Shortcuts "Always", "Run Immediately" on, widen the arrival radius |
 | iPhone email doesn't auto-send | Turn off "Show Compose Sheet"; otherwise use the webhook |
 | Wake 406 | Add body `{}` and Content-Type |
@@ -296,7 +263,7 @@ A few events a day with 3–4 recalculations is a few hundred requests a month, 
 | Climate temperature | Default 70°F (set each time climate starts) |
 | Units | °F and miles (default) |
 | Commute days and window | e.g. weekdays 5:30–11:00 PM |
-| Parking location (geofence) | Android: Automate "Location at" block (lat/lon, radius) / iPhone: Shortcuts "Arrive" location and radius |
+| Parking location (geofence) | Android: MacroDroid location trigger / iPhone: Shortcuts "Arrive" location and radius |
 | Walk time to car | e.g. home 2 min, work 15 min |
 | Climate lead time | e.g. 10 min before car departs |
 | Auto-send nav destination | On / off (default on, calendar prep only) |
