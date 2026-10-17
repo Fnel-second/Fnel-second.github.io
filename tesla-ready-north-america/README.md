@@ -132,11 +132,11 @@ An Android app made for this guide. You don't build macros: enter the webhook UR
 |---|---|
 | Entering the parking area | `{"event":"parking_enter","place":"<name>"}` |
 | Test button | `{"event":"test"}` |
-| Car Bluetooth disconnects (after-blow, section 6) ⚠️ not yet verified | `{"event":"after_blow"}` |
-| The app's cancel button ⚠️ not yet verified | `{"event":"after_blow_cancel"}` |
+| Car Bluetooth disconnects (after-blow, section 6) ✅ verified Oct 17, 2026 | `{"event":"after_blow"}` |
+| The app's cancel button ✅ verified Oct 17, 2026 | `{"event":"after_blow_cancel"}` |
 
 - If you don't use after-blow, leave the car Bluetooth setting in the app empty.
-- If you used to send the parking signal with MacroDroid, turn that macro off once the app test works, so the signal isn't sent twice.
+- ⚠️ **Moving to the app? Turn off your old macros.** Once the app test works, turn off your old MacroDroid (or other automation) **parking macro and after-blow macro**, so signals aren't sent twice.
 
 ### Android alternative: MacroDroid / iPhone: Shortcuts
 
@@ -250,9 +250,10 @@ A few events a day with 3–4 recalculations is a few hundred requests a month, 
 
 **Sending the signal**
 
-**Android (Tesla Ready app)** ⚠️ not yet verified
-- Choose your car's Bluetooth in the app settings. When it disconnects, the app sends `{"event":"after_blow"}`. The app also has a cancel button (not yet verified); cancelling by replying "cancel" in chat always works.
-- If you use the MacroDroid after-blow macro instead, leave the app's car Bluetooth empty so it isn't sent twice.
+**Android (Tesla Ready app)** ✅ verified on a real car (Oct 17, 2026)
+- Choose your car's Bluetooth in the app settings. When it disconnects, the app sends `{"event":"after_blow"}`. The app's cancel button sends `{"event":"after_blow_cancel"}`; replying "cancel" in chat also works.
+- Real-car check on Oct 17, 2026 (KST): `after_blow` received at 11:07, `after_blow_cancel` at 11:19, then an actual after-blow fan run from 11:26 to 11:31 succeeded. `climate_keeper_mode` (Camp/Dog mode) was confirmed readable via the API.
+- ⚠️ If you move after-blow to the app, turn off your old MacroDroid (or other) after-blow macro, and the old parking macro too, so signals aren't sent twice. If you keep the MacroDroid after-blow macro instead, leave the app's car Bluetooth empty.
 
 **Android alternative (MacroDroid)**
 - New macro, trigger "Bluetooth Disconnected" → your car (fires wherever you park)
