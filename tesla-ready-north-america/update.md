@@ -21,6 +21,11 @@ The bot updates its own memory, routines and skill, and walks you through anythi
 
 ## What changed and what to do
 
+### 2026-10-23: Departure prep on request
+
+- New: say **"prep the car"** in chat and the bot starts climate based on how far you are from the car (phone location, or your saved walk times if location isn't available), sends the event destination to navigation if any, and reports climate time, cabin °F, distance/direction to the car and estimated walk time. See "Departure prep on request" in [main guide section 5](https://fnel-second.github.io/tesla-ready-north-america/).
+- To use your phone's location, allow location for the Grok Bot phone app. Nothing else to set up; automatic and webhook flows are unchanged.
+
 ### 2026-10-17: App after-blow and cancel verified on a real car
 
 - The Tesla Ready app's after-blow (car Bluetooth disconnect → `{"event":"after_blow"}`) and cancel button (`{"event":"after_blow_cancel"}`) were verified on a real car on Oct 17, 2026 (KST): `after_blow` received at 11:07, `after_blow_cancel` at 11:19, then an actual after-blow fan run from 11:26 to 11:31 succeeded. `climate_keeper_mode` (Camp/Dog mode) was confirmed readable via the API.
@@ -56,3 +61,4 @@ Keep the owner's settings (webhook URL and key, time window, parking location, s
 3. **Android users**: guide them through section 1 above, one step at a time. After the app test works, have them turn off the old MacroDroid (or other) parking and after-blow macros so signals aren't duplicated. App after-blow and cancel were verified on a real car on Oct 17, 2026. Ask Android or iPhone first if unknown.
 4. **Duplicates**: if you see two routines doing the same job, tell the owner and help keep only one.
 5. **Update check routine**: if it doesn't exist yet, create the weekly "Guide update check" routine (Monday morning). It reads this page and the app's latest release, stays silent if nothing changed since last time, otherwise summarizes the changes for the owner and applies only what they agree to. Never touch secrets.
+6. **Departure prep**: save the on-request departure prep rule to memory (chat only, not a routine): on "prep the car", read phone location with DeviceGetLocation (fallback: saved walk times) and car location; leave now unless an event is named (ask only if ambiguous); leave now → climate now if walk <10 min, else 10 min before reaching the car; event → 10 min before departure or now if past; send the destination to nav if any; report climate time, cabin °F, distance + direction to car, walk time (straight-line estimate), nav result. Never store coordinates. Don't change existing routines.

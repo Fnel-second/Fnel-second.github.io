@@ -228,6 +228,19 @@ A few events a day with 3–4 recalculations is a few hundred requests a month, 
 - Required Tesla scope is `vehicle_cmds`, same as climate. No extra auth.
 - Not used for the parking-webhook commute climate.
 
+### 🚶 Departure prep on request
+
+Say **"prep the car"** in chat and the bot gets the car ready for you right away. This runs only when you ask; the automatic commute and webhook flows don't change.
+
+- **Where you are**: the bot reads your phone's location (allow location for the Grok Bot phone app) and the car's location via the Fleet API, and estimates the walk from the straight-line distance. Location is read only in chat, never in routines, and coordinates aren't saved or shared. If location isn't available, it uses your saved walk times (home → car, work → car).
+- **Which trip**: plain "prep the car" means you're leaving now, even if there's a calendar event. Name an event ("prep the car for my 3 PM meeting") and it times climate to that event. It asks only if it's unclear.
+- **When climate starts**:
+  - Leaving now, walk under 10 min → climate starts immediately.
+  - Leaving now, longer walk → 10 min before you reach the car.
+  - For an event → 10 min before departure (immediately if that's already past).
+- **Navigation**: if there's a destination (the event location), it's sent to the car with the same steps as above.
+- **Report**: climate start time, cabin temperature (°F), distance and direction to the car (e.g. "0.2 mi northeast"), walk time (a straight-line estimate, so actual time may be longer), and the navigation result.
+
 ## 6. After-blow (optional, off by default)
 
 ⚠️ Tesla has no official after-blow feature. This is a workaround with a similar effect: briefly running the fan after you park to dry moisture in the A/C system.
